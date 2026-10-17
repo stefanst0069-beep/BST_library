@@ -15,7 +15,7 @@ struct Node {
     }
 };
 
-Node* InsertVal (Node* r, int val);
+Node* Insert_Value (Node* r, int val);
 
 int main(){
     srand( time(NULL) );
@@ -23,14 +23,14 @@ int main(){
     
     for ( int i = 0; i < 50; i++ ){
         int v = ( rand()%100 )+1;
-        InsertVal ( Root, v );
+        Insert_Value ( Root, v );
     }
     system ("PAUSE");
     return 0;
 }
 
 
-Node* InsertVal ( Node* r, int val ){
+Node* Insert_Value ( Node* r, int val ){
     
     if ( r == nullptr ){
         return new Node ( val );
@@ -41,9 +41,9 @@ Node* InsertVal ( Node* r, int val ){
     }
     
     if ( r->data > val ){
-        r->right_child = InsertVal ( r->right_child, val );
+        r->right_child = Insert_Value ( r->right_child, val );
     }else{
-        r->left_child = InsertVal ( r->left_child, val );
+        r->left_child = Insert_Value ( r->left_child, val );
     }
 
     return r;
