@@ -40,7 +40,7 @@ Node* Insert_Value ( Node* r, int val ){
         return r;
     }
     
-    if ( r->data > val ){
+    if ( r->data < val ){
         r->right_child = Insert_Value ( r->right_child, val );
     }else{
         r->left_child = Insert_Value ( r->left_child, val );
