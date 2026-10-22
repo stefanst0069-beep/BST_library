@@ -1,5 +1,17 @@
 #include <iostream>
 
+struct Node {
+    int data;
+    Node* left_child;
+    Node* right_child;
+
+    Node( int val ){
+        data = val;
+        left_child = nullptr;
+        right_child = nullptr;
+    }
+};
+
 Node* Insert_Value_recoursive ( Node* r, int val ){
     
     if ( r == nullptr ){
@@ -111,4 +123,58 @@ Node* find_Maximum (Node* r){
     }
 
 }
-ciao
+
+int count_Nodes ( Node* r ){
+    
+    if ( r == nullptr ){
+
+        return 0;
+
+    }
+
+    return 1 + count_Nodes( r->left_child ) + count_Nodes( r->right_child );
+    
+}
+
+int count_Leaves (Node* r){
+
+    if ( r == nullptr){
+
+        return 0;
+        
+    }
+    
+    if ( r->left_child == nullptr && r->right_child == nullptr ){
+
+        return 1;
+
+    }
+
+    return count_Leaves( r->left_child ) + count_Leaves( r->right_child );
+
+}
+
+int count_In_Range (Node* r, int min, int max){
+
+    
+    if ( r == nullptr){
+
+        return 0;
+
+    }
+    
+    if ( r->data < min ){
+
+        return count_In_Range( r->right_child, min, max );
+
+    }
+    
+    if ( r->data > max ){
+
+        return count_In_Range ( r->left_child, min, max );
+
+    }
+
+    return 1 + count_In_Range ( r->left_child, min, max ) + count_In_Range ( r->right_child, min, max );
+
+}
