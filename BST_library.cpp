@@ -19,3 +19,47 @@ Node* Insert_Value_recoursive ( Node* r, int val ){
     return r;
 
 }
+
+Node* Insert_Value_iterative (Node* r, int val){
+    
+    if ( r == nullptr ){
+
+        return new Node ( val );
+
+    }
+
+    Node* dad = nullptr;
+    Node* current = r;
+
+    while (current != nullptr ){
+        dad = current;
+
+        if ( current->data < val ){
+            
+            current = current->right_child;
+
+        }else if ( current->data > val ){
+
+            current = current->left_child;
+
+        }else{
+
+            return r;
+
+        }
+
+    }
+
+    if ( dad->data < val ){
+
+        dad->right_child = new Node (val);
+
+    }else{
+
+        dad->left_child = new Node (val);
+
+    }
+
+    return r;
+
+}
