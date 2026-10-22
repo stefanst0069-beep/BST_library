@@ -63,3 +63,23 @@ Node* Insert_Value_iterative (Node* r, int val){
     return r;
 
 }
+
+Node* Search_Value_recoursive (Node* &r, int val){
+
+    if ( r == nullptr ){
+        cout<<"Unfound value"<<endl;
+        return nullptr;
+    }
+
+    if ( r->data == val ){
+        cout<<"Founded value"<<endl;
+        return r;
+    }
+    
+    if ( r->data < val ){
+        return Search_Value_recoursive ( r->right_child, val );
+    }else{
+        return Search_Value_recoursive ( r->left_child, val ); 
+    }
+
+}
