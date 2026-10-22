@@ -97,3 +97,17 @@ Node* find_Minimum (Node* r){
     }
 
 }
+
+Node* find_Maximum (Node* r){
+
+    if ( r->right_child == nullptr ){
+
+        return r;
+
+    }else{
+
+        return find_Maximum( r->right_child );
+
+    }
+
+}
