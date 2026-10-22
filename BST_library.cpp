@@ -83,3 +83,17 @@ Node* Search_Value_recoursive (Node* &r, int val){
     }
 
 }
+
+Node* find_Minimum (Node* r){
+
+    if ( r->left_child == nullptr ){
+
+        return r;
+
+    }else{
+
+        return find_Minimum( r->left_child );
+
+    }
+
+}
