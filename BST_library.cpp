@@ -112,44 +112,21 @@ Node* find_Maximum (Node* r){
 
 }
 
-// Esercitazione (90 minuti): refactoring di un BST, da struct a classi - classe 4C
-// Nome/Codice: ______________________
-//
-// Trasforma la libreria del Binary Search Tree: la struct Node diventa una classe con
-// attributi privati e le funzioni libere diventano metodi di una nuova classe BST.
-// I nomi dei metodi sono quelli scritti qui sotto e usati da main.cpp: decidi tu
-// parametri e tipo restituito, guardando anche come li usa main.cpp.
-// NON modificare main.cpp. Consegna SOLO questo file (bst.cpp).
-// Se un metodo non riesci a scriverlo, lascia almeno una versione vuota
-// (che restituisce un valore qualsiasi) per far compilare il programma.
-
-#include <iostream>
-using namespace std;
-
-// =====================================================================
-// PARTE A - la classe Node (circa 15 minuti)
-// =====================================================================
-
 class Node {
 private:
-    // TODO 1 - gli attributi: la chiave (int) e i puntatori ai due figli.
-    //          Usa gli stessi nomi della struct originale: data, left, right.
+
     int data;
     Node* left;
     Node* right;
 
 public:
-    // TODO 1 - costruttore Node
-    //          Riceve la chiave. All'inizio il nodo non ha figli (entrambi i puntatori valgono nullptr).
-    //          Dai al parametro un nome diverso da quello dell'attributo.
+
     Node (int key){
         data = key;
         left = nullptr;
         right = nullptr;
     }
 
-    // TODO 2 - getData, getLeft, getRight
-    //          Restituiscono la chiave, il figlio sinistro e il figlio destro.
     int getData(){
         return data;
     }
@@ -162,9 +139,6 @@ public:
         return right;
     }
 
-    // TODO 3 - setData, setLeft, setRight
-    //          Modificano la chiave e collegano il figlio sinistro e il figlio destro.
-    //          setLeft e setRight ricevono l'indirizzo di un nodo (o nullptr per scollegare).
     void setData(int key){
         data=key;
     }
@@ -177,8 +151,6 @@ public:
         right=child;
     }
 
-    // TODO 4 - isLeaf
-    //          Dice se il nodo e' una foglia, cioe' se non ha nessun figlio.
     bool isLeaf (){
         if (left == nullptr && right == nullptr){
             return true;
@@ -188,23 +160,12 @@ public:
 
 };
 
-// =====================================================================
-// PARTE B - la classe BST: struttura, inserimento, ricerca, visita (circa 30 minuti)
-// L'albero conosce solo la radice e il numero di nodi: da fuori non si vede nessun Node.
-// =====================================================================
-
 class BST {
 private:
-    Node* root;         // radice dell'albero, nullptr se l'albero e' vuoto
-    int numNodi;        // numero di chiavi presenti
-
-    // Qui puoi aggiungere funzioni di appoggio private (per esempio quelle ricorsive,
-    // che hanno bisogno di ricevere un nodo come argomento).
+    Node* root;    
+    int numNodi;        
 
 public:
-    // TODO 5 - costruttore BST, isEmpty, size
-    //          Il costruttore crea un albero vuoto. isEmpty dice se l'albero e' vuoto,
-    //          size restituisce quante chiavi contiene.
     BST (){
         root = nullptr;
         numNodi = 0;
@@ -225,21 +186,15 @@ public:
     }
 
     int size(){
-        numNodi = count_Nodes(root);
-        return numNodi;
+        return count_Nodes(root);
         
     }
 
-
-    // TODO 6 - insert
-    //          Riceve una chiave e la inserisce al posto giusto creando un nuovo Node con new.
-    //          Niente duplicati: se la chiave e' gia' presente non fa nulla.
-    //          Dice se la chiave e' stata inserita.
     bool insert(int key){
-        Node* newNode = new Node (key);
              
         if (root==nullptr){
             root = new Node (key);
+            numNodi++;
             return true;
         }
 
@@ -256,7 +211,6 @@ public:
                 corrente = corrente->getRight();
 
             }else{
-                delete newNode;
                 return false;
 
             }
@@ -264,11 +218,13 @@ public:
         }
         
         if (key < padre->getData()){
-            padre->setLeft(newNode);
+            padre->setLeft(new Node (key));
+            numNodi++;
             return true;
             
         }else if (key > padre->getData()){
-            padre->setRight(newNode);
+            padre->setRight(new Node (key));
+            numNodi++;
             return true;
         }
 
@@ -276,8 +232,6 @@ public:
 
     }
 
-    // TODO 7 - search
-    //          Dice se una chiave e' presente nell'albero (non modifica l'albero).
     bool search (int key){
         
         if (root == nullptr){
@@ -303,10 +257,6 @@ public:
         return false;
     }
 
-    // TODO 8 - inOrder
-    //          Stampa su cout tutte le chiavi in ordine crescente (visita inorder),
-    //          ciascuna seguita da uno spazio. Se l'albero e' vuoto non stampa nulla.
-    //          Non va a capo: ci pensa il main.
     void inorder(Node* r){
         if (r==nullptr){
             return ;
@@ -320,9 +270,6 @@ public:
         inorder(root);
     }
 
-    // TODO 9 - height
-    //          Restituisce l'altezza dell'albero, cioe' il numero di nodi del cammino piu' lungo
-    //          dalla radice a una foglia. Albero vuoto: 0.
     int height2(Node* root) {
     
         if (root == nullptr){
@@ -343,10 +290,6 @@ public:
     int height(){
         return height2(root);
     }
-
-    // TODO 10 - minimo, massimo
-    //          Restituiscono la chiave piu' piccola e quella piu' grande.
-    //          Per un albero vuoto restituiscono -1 (nell'esercizio le chiavi sono sempre positive).
     
     int minimo(){
         
@@ -382,14 +325,6 @@ public:
         return padre->getData();
     }
 
-    // =================================================================
-    // PARTE C - cancellazione e memoria (circa 30 minuti)
-    // =================================================================
-
-    // TODO 11 - remove
-    //          Elimina una chiave dall'albero e dice se esisteva. Gestisci i tre casi:
-    //          nodo senza figli, con un figlio, con due figli (si sostituisce la chiave con
-    //          quella del successore). Ogni nodo tolto va liberato con delete.
     bool remove (int key){
         
         if (root==nullptr){
@@ -420,11 +355,13 @@ public:
             if (padre->getData()>corrente->getData()){
                 delete corrente;
                 padre->setLeft(nullptr);
+                numNodi--;
                 return true;
             
             }else{
                 delete corrente;
                 padre->setRight(nullptr);
+                numNodi--;
                 return true;
 
             }
@@ -446,6 +383,7 @@ public:
                 padre->setData(temp);
                 pTemp->setLeft(nullptr);
                 delete corrente;
+                numNodi--;
                 return true;
             }else{
                 
@@ -454,11 +392,13 @@ public:
                     if (padre->getData()>corrente->getData()){
                         padre->setLeft(corrente->getLeft());
                         delete corrente;
+                        numNodi--;
                         return true;
                         
                     }else{
                         padre->setRight(corrente->getLeft());
                         delete corrente;
+                        numNodi--;
                         return true;
                     }
 
@@ -466,11 +406,13 @@ public:
                    if (padre->getData()>corrente->getData()){
                         padre->setLeft(corrente->getRight());
                         delete corrente;
+                        numNodi--;
                         return true;
                         
                     }else{
                         padre->setRight(corrente->getRight());
                         delete corrente;
+                        numNodi--;
                         return true;
                     } 
                 }
@@ -479,9 +421,6 @@ public:
         return false;
     }
 
-    // TODO 12 - svuota
-    //          Libera con delete tutti i nodi e riporta l'albero allo stato vuoto.
-    //          Deve poter essere chiamata anche due volte di fila senza danni.
     void svuota2(Node* r){
         if (r==nullptr){
             return ;
@@ -493,30 +432,31 @@ public:
 
     void svuota(){
         svuota2(root);
+        numNodi = 0;
         root=nullptr;
     }
 
-    // TODO 13 - contaFoglie
-    //          Restituisce quante foglie ha l'albero (usa isLeaf). Albero vuoto: 0.
-    int contaFoglie2(Node* r){
+    int contaFoglie2(Node* r, int count){
         if (r==nullptr){
             return 0;
+            
         }
-        contaFoglie2(r->getLeft());
-        contaFoglie2(r->getRight());
-        return (r->isLeaf()? 1 : 0);
+        
+        if (r->isLeaf()==true){
+            return 1;
+        }
+        count = count + contaFoglie2(r->getLeft(), 0);
+        count = count + contaFoglie2(r->getRight(), 0); 
+
+        return count;
     }
     
     int contaFoglie(){
 
-        return contaFoglie2(root);
+        return contaFoglie2(root, 0);
 
     }
 
-    // BONUS TODO 14 - contaIntervallo
-    //          Riceve due chiavi low e high e restituisce quante chiavi dell'albero sono comprese
-    //          tra low e high (estremi inclusi). Sfrutta la proprieta' del BST: non serve
-    //          visitare i sottoalberi che non possono contenere chiavi dell'intervallo.
     int contaIntervallo2(Node* root, int low, int high, int count) {
         if (root==nullptr){
             return 0;
@@ -536,6 +476,11 @@ public:
         return count;
 
     }
+    
+    int contaIntervallo (int low, int high){
+        return contaIntervallo2(root, low, high, 0);
+    }
+};
     
     int contaIntervallo (int low, int high){
         return contaIntervallo2(root, low, high, 0);
